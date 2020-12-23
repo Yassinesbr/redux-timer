@@ -1,20 +1,20 @@
-import React, { useState } from 'react'
 import Button from './component/Button'
 import Label from './component/Label'
 
 import { connect } from 'react-redux'
 
-const Timer = ({ timer, incTimer, decTimer, resTimer , setLap }) => {
+const display = (h, m, s) => {
+  h < 10 && (h = '0' + h)
+  m < 10 && (m = '0' + m)
+  s < 10 && (s = '0' + s)
+  return <h1>{h} : {m} : {s}</h1>
+}
+
+const Timer = ({ timer, incTimer, decTimer, setLap }) => {
   // const [timer, setTimer] = useState({ time: { h: 0, m: 1, s: 30 }, laps: [] })
 
   const [h, m, s] = [timer.time.h, timer.time.m, timer.time.s]
 
-  const display = (h, m, s) => {
-    h < 10 && (h = '0' + h)
-    m < 10 && (m = '0' + m)
-    s < 10 && (s = '0' + s)
-    return <h1>{h} : {m} : {s}</h1>
-  }
   // const incTimer = () => {
   //   setTimer(Object.assign({}, timer, timer.time.s++));
   //   (timer.time.s === 60) && setTimer(Object.assign({}, timer, timer.time.s = 0, timer.time.m++));
@@ -35,10 +35,10 @@ const Timer = ({ timer, incTimer, decTimer, resTimer , setLap }) => {
     <div>
       {display(h, m, s)}
       <Button clicked={incTimer} name='Increment' />
-      <Button clicked={setLap} name='Lap' />
-      <Button clicked={resTimer} name='Reset' />
+      <Button clicked={() => setLap({ h, m, s })} name='Lap' />
+      <Button name='Reset' />
       <Button clicked={decTimer} name='Decrement' />
-      <Label />
+      <Label laps = {} />
     </div>
   )
 }
@@ -46,7 +46,7 @@ const Timer = ({ timer, incTimer, decTimer, resTimer , setLap }) => {
 const mapStateToProps = state => {
   return {
     timer: state.TimerReducer,
-    lap: state.LapReducer
+    lap: state.lapReducer
   }
 }
 
@@ -54,8 +54,7 @@ const mapDispatchToProps = dispatch => {
   return {
     incTimer: () => dispatch({ type: 'INCREMENT' }),
     decTimer: () => dispatch({ type: 'DECREMENT' }),
-    resTimer: () => dispatch({ type: 'RESET' }),
-    setLap: () => dispatch({ type: 'LAPPING' })
+    setLap: (data) => dispatch({ type: 'LAPPING', payload: data })
   }
 }
 

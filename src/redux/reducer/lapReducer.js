@@ -1,9 +1,28 @@
-const initialState = [1]
 
-const lapReducer = (state = initialState, action) => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const lapReducer = (state = [], action) => {
   switch (action.type) {
     case 'LAPPING':
-      return [...state, state + 1]
+      return [...state, action.payload]
 
     default:
       return state
